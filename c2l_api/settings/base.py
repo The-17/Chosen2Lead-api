@@ -8,7 +8,6 @@ import cloudinary.api
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-
 SECRET_KEY = config("SECRET_KEY")
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(" ")
@@ -26,6 +25,8 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "drf_spectacular",
     "whitenoise",
+    "cloudinary",
+    "cloudinary_storage"
     # "corsheaders",
 ]
 
@@ -64,10 +65,6 @@ SPECTACULAR_SETTINGS = {
         The api for Chosen2lead website
     """,
     "VERSION": "1.0.0",
-
-    "TAGS": [
-        {"name": "Auth", "description": "Authentication Endpoints"},
-    ],
 }
 
 TEMPLATES = [
@@ -140,6 +137,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STORAGES = "cloudinary_storage.storage.MediaCloudinaryStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
@@ -147,16 +145,24 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/"),
 ]
 MEDIA_ROOT = os.path.join(BASE_DIR, "static/media")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_STORAGE = "c"
 
 CLOUDINARY_STORAGE = {
-    "cloud_name": config("CLOUDINARY_CLOUD_NAME"),
-    "api_key": config("CLOUDINARY_API_KEY"),
-    "api_secret": config("CLOUDINARY_API_SECRET"),
+    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": config("CLOUDINARY_API_KEY"),
+    "API_SECRET": config("CLOUDINARY_API_SECRET"),
+    "resource_type":"auto"
 }
 
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
