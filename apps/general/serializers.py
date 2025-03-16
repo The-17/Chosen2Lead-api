@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Service, faq, Company
+from .models import Service, faq, Company, Inquiry, JobApplication
 
 
 class ServicesSerializer(serializers.ModelSerializer):
@@ -20,3 +20,13 @@ class FaqSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class InquirySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Inquiry 
+        fields = "__all__"
+
+
+class JobApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobApplication
+        fields = "__all__"

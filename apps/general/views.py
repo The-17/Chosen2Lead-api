@@ -1,8 +1,19 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Service, Company, faq
-from .serializers import ServicesSerializer, CompanySerializer, FaqSerializer
+from .models import (
+    Service, 
+    Company, 
+    faq, 
+    Inquiry
+)
+from .serializers import (
+    ServicesSerializer, 
+    CompanySerializer, 
+    FaqSerializer, 
+    InquirySerializer,
+    JobApplicationSerializer
+)
 from drf_spectacular.utils import extend_schema
 
 class ServicesListAPIView(APIView):
@@ -61,3 +72,38 @@ class FAQAPIView(APIView):
             "data":serializer.data
             }, status=status.HTTP_200_OK)
 
+
+class InquiryAPIView(APIView):
+    serializer_class = InquirySerializer
+
+    def get(self, request):
+        inquiries = Inquiry.objects.all()
+        serializer = self.serializer_class(inquiries, many=True)
+
+        return Response({
+            "message": "Inquiries retreived successfully",
+            "data":serializer.data
+            }, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({
+            "message": "inquiry Submitted successfully",
+            "data":serializer.data
+            }, status=status.HTTP_201_CREATED)
+    
+
+class JobApplicationAPIView(APIView):
+    serializer_class = JobApplicationSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            "message": "Application Submitted successfully",
+            "data":serializer.data
+            }, status=status.HTTP_201_CREATED)

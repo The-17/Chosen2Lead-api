@@ -41,3 +41,34 @@ class faq(BaseModel):
     def __str__(self):
         return self.question
 
+
+class Inquiry(BaseModel):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+
+
+class JobApplication(BaseModel):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    referral = models.CharField(max_length=200, null=True, blank=True)
+    position = models.CharField(max_length=500)
+    address = models.CharField(max_length=500)
+    level_of_education = models.CharField(max_length=200)
+    course_of_study = models.CharField(max_length=500, null=True, blank=True)
+    house_address = models.TextField()
+    country = models.CharField(max_length=20)
+    state = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    postal_code = models.CharField(max_length=10)
+    cover_letter = models.TextField()
+    references = models.TextField()
+    terms_agreement = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.first_name}, {self.position}"
+
