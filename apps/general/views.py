@@ -76,15 +76,12 @@ class FAQAPIView(APIView):
 class InquiryAPIView(APIView):
     serializer_class = InquirySerializer
 
-    def get(self, request):
-        inquiries = Inquiry.objects.all()
-        serializer = self.serializer_class(inquiries, many=True)
-
-        return Response({
-            "message": "Inquiries retreived successfully",
-            "data":serializer.data
-            }, status=status.HTTP_200_OK)
-    
+    @extend_schema(
+            summary="Submit service inquiries",
+            description="""
+                This endpoint creates a new service inquiry and sends an email to chosen2lead
+                """
+    )
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -99,6 +96,12 @@ class InquiryAPIView(APIView):
 class JobApplicationAPIView(APIView):
     serializer_class = JobApplicationSerializer
 
+    @extend_schema(
+            summary="Submit Job application",
+            description="""
+                This endpoint creates a new sejob application and sends an email to chosen2lead
+                """
+    )
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
